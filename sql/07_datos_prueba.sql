@@ -196,4 +196,6 @@ INSERT INTO mantenimiento (id_habitacion, id_empleado, tipo, descripcion, fecha_
  ( 5, 9, 'correctivo', 'Reemplazo de barras de apoyo del baño',       '2026-11-17', 'en_proceso'),
  (13, 10,'correctivo', 'Filtración de agua en techo (espera repuesto)','2026-11-08', 'en_proceso');
 
+-- La vista materializada se creó vacía en 04_reportes.sql (antes de estos datos)
+REFRESH MATERIALIZED VIEW mv_resumen_mensual;
 ANALYZE;
