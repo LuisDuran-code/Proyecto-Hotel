@@ -13,13 +13,13 @@ Ingeniería en Desarrollo de Software
 
 | Integrante | Carné | Área principal |
 |------------|-------|----------------|
-| [Nombre 1] | [Carné] | Diseño del modelo ER e implementación |
-| [Nombre 2] | [Carné] | Almacenamiento, rendimiento y mantenimiento |
-| [Nombre 3] | [Carné] | Respaldos, recuperación y alta disponibilidad |
-| [Nombre 4] | [Carné] | Seguridad, monitoreo y alertas |
+| Luis Antonio Ruiz Duran | RD20014 | Diseño del modelo ER e implementación |
+| Wendy Carolina Aristondo Soto | AS21020 | Almacenamiento, rendimiento y mantenimiento |
+| Joel Isaias Garcia Torres | GT14001 | Respaldos, recuperación y alta disponibilidad |
+| Adriana Vanessa Rivera de Rivera | RR20075 | Seguridad, monitoreo y alertas |
 
-Docente: [Nombre del docente]<br>
-Fecha de entrega: [fecha]
+Docente: Jonathan Wilfredo Rodriguez Ramos<br>
+Fecha de entrega: 18 de noviembre de 2026
 
 </div>
 
