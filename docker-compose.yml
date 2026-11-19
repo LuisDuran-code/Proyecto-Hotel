@@ -1,0 +1,79 @@
+# Sistema de Administración Hotelera — infraestructura de base de datos
+#   primario : servidor de lectura/escritura (puerto 5433 en el host)
+#   replica  : hot standby con replicación en streaming (puerto 5434, solo lectura)
+#   pgadmin  : opcional  ->  docker compose --profile tools up -d
+name: hotel
+
+x-pg-env: &pg-env
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  POSTGRES_DB: hotel
+  HOTEL_CLAVE_CIFRADO: ${HOTEL_CLAVE_CIFRADO}
+  PASS_REPLICADOR: ${PASS_REPLICADOR}
+  PASS_BACKUP: ${PASS_BACKUP}
+  PASS_MONITOR: ${PASS_MONITOR}
+  PASS_EMPLEADOS: ${PASS_EMPLEADOS}
+  TZ: America/El_Salvador
+
+services:
+  primario:
+    build: ./docker/postgres
+    image: hotel-postgres:18
+    container_name: hotel-primario
+    hostname: hotel-primario
+    environment: *pg-env
+    ports: ["5433:5432"]
+    shm_size: 256mb
+    volumes:
+      - pgdata_primario:/var/lib/postgresql
+      - ts_indices_primario:/ts/indices
+      - ts_historico_primario:/ts/historico
+      - wal_archive:/wal_archive
+      - backups:/backups
+      - ./sql:/sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d hotel"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  replica:
+    image: hotel-postgres:18
+    container_name: hotel-replica
+    hostname: hotel-replica
+    entrypoint: ["/usr/local/bin/replica-entrypoint.sh"]
+    environment:
+      PRIMARY_HOST: hotel-primario
+      PASS_REPLICADOR: ${PASS_REPLICADOR}
+      TZ: America/El_Salvador
+    ports: ["5434:5432"]
+    shm_size: 256mb
+    volumes:
+      - pgdata_replica:/var/lib/postgresql
+      - ts_indices_replica:/ts/indices
+      - ts_historico_replica:/ts/historico
+      - wal_archive:/wal_archive:ro
+    depends_on:
+      primario:
+        condition: service_healthy
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4:9
+    container_name: hotel-pgadmin
+    profiles: ["tools"]
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@hotel.local}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+    ports: ["8080:80"]
+    depends_on: [primario]
+
+volumes:
+  pgdata_primario:
+  pgdata_replica:
+  ts_indices_primario:
+  ts_historico_primario:
+  ts_indices_replica:
+  ts_historico_replica:
+  wal_archive:
+  backups:

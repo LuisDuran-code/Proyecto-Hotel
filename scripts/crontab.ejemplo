@@ -1,0 +1,10 @@
+# Programación de tareas (alternativa a systemd para servidores con cron)
+# Instalar con: crontab -e   (ajustar RUTA)
+RUTA=/opt/Proyecto-Hotel
+#  min hora dia mes dsem  comando
+   0   2    *   *   *     $RUTA/scripts/backup_logico.sh       >> $RUTA/logs/backup.log 2>&1
+   0   3    *   *   0     $RUTA/scripts/backup_fisico.sh       >> $RUTA/logs/backup.log 2>&1
+   0   4    *   *   1     $RUTA/scripts/verificar_backup.sh    >> $RUTA/logs/backup.log 2>&1
+   30  3    *   *   *     $RUTA/scripts/mantenimiento.sh diario   >> $RUTA/logs/mantenimiento.log 2>&1
+   30  4    *   *   0     $RUTA/scripts/mantenimiento.sh semanal  >> $RUTA/logs/mantenimiento.log 2>&1
+   */5 *    *   *   *     $RUTA/scripts/monitoreo.sh           > /dev/null 2>&1

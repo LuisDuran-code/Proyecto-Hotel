@@ -1,0 +1,18 @@
+# Secretos
+.env
+
+# Backups y archivado de WAL (los generaremos en la semana 3)
+*.dump
+*.backup
+*.sql.gz
+backups/
+wal_archive/
+
+# Editor / sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs de los scripts de operación
+logs/
